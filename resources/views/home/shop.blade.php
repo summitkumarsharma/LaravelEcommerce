@@ -11,9 +11,7 @@
     @include('home.header')
     <!-- end header section -->
     
-    @include('home.slider')                                                                                                          
-    <!-- slider section -->
-    <!-- end slider section -->
+   
 
 
   </div>
@@ -25,21 +23,6 @@
 
   <!-- end shop section -->
 
-
-
-
-
-
-
-  <!-- contact section -->
-
-   {{--  @include('home.contact')  --}}
-
-  
-
-  <!-- end contact section -->
-
-   
 
   <!-- info section -->
     @include('home.footer')

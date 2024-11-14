@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -113,9 +115,9 @@ class AdminController extends Controller
     }
 
     // This function will show update product page 
-    public function update_product($id){
+    public function update_product($slug){
 
-        $data = Product::find($id);
+        $data = Product::where('slug',$slug)->get()->first();
         $category = Category::all();
         return view('admin.update_page',compact('data','category'));
     }
@@ -151,5 +153,32 @@ class AdminController extends Controller
 
         return view('admin.view_product',compact('product'));
     
+    }
+
+    public function view_order(){
+        $data = Order::all();
+        return view("admin.order",compact('data'));
+    }
+
+    public function on_the_way($id){
+        $data = Order::find($id);
+        $data->status = 'On the way';
+        $data->save();
+        toastr()->timeOut(10000)->closeButton(true)->success('Order Status Updated Successfully.');
+        return redirect('/view_order');
+    }
+
+    public function delivered($id){
+        $data = Order::find($id);
+        $data->status = 'Delivered';
+        $data->save();
+        toastr()->timeOut(10000)->closeButton(true)->success('Order Status Updated Successfully.');
+        return redirect('/view_order');
+    }
+
+    public function print_pdf($id){
+        $data = Order :: find($id);
+        $pdf = Pdf::loadView('admin.invoice',compact('data'));
+        return $pdf->download('invoice.pdf');
     }
 }
